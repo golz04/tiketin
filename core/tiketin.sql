@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.1
+-- version 5.0.4
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 04 Des 2020 pada 00.09
--- Versi server: 10.4.8-MariaDB
--- Versi PHP: 7.3.11
+-- Waktu pembuatan: 06 Des 2020 pada 14.59
+-- Versi server: 10.4.17-MariaDB
+-- Versi PHP: 7.4.13
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -31,6 +30,18 @@ SET time_zone = "+00:00";
 CREATE TABLE `chairs` (
   `id_chair` int(5) NOT NULL,
   `chair_number` varchar(5) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `companies`
+--
+
+CREATE TABLE `companies` (
+  `id_company` int(5) NOT NULL,
+  `company_name` varchar(50) NOT NULL,
+  `address` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -141,13 +152,6 @@ CREATE TABLE `users` (
   `role_id` smallint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data untuk tabel `users`
---
-
-INSERT INTO `users` (`id_user`, `name`, `email`, `password`, `gender`, `contact`, `address`, `role_id`) VALUES
-(1, 'Muhammad Haidar', 'muhammadhaidar862@gmail.com', '123', 'L', '083856116340', 'Bondowoso - Maesan', 1);
-
 -- --------------------------------------------------------
 
 --
@@ -172,15 +176,6 @@ CREATE TABLE `user_roles` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data untuk tabel `user_roles`
---
-
-INSERT INTO `user_roles` (`id_role`, `role_name`) VALUES
-(1, 'Admin'),
-(2, 'Operator'),
-(3, 'Customer');
-
---
 -- Indexes for dumped tables
 --
 
@@ -189,6 +184,12 @@ INSERT INTO `user_roles` (`id_role`, `role_name`) VALUES
 --
 ALTER TABLE `chairs`
   ADD PRIMARY KEY (`id_chair`);
+
+--
+-- Indeks untuk tabel `companies`
+--
+ALTER TABLE `companies`
+  ADD PRIMARY KEY (`id_company`);
 
 --
 -- Indeks untuk tabel `genres`
@@ -200,13 +201,17 @@ ALTER TABLE `genres`
 -- Indeks untuk tabel `movies`
 --
 ALTER TABLE `movies`
-  ADD PRIMARY KEY (`code_film`);
+  ADD PRIMARY KEY (`code_film`),
+  ADD KEY `genre_id` (`genre_id`),
+  ADD KEY `company_id` (`company_id`);
 
 --
 -- Indeks untuk tabel `schedules`
 --
 ALTER TABLE `schedules`
-  ADD PRIMARY KEY (`id_schedule`);
+  ADD PRIMARY KEY (`id_schedule`),
+  ADD KEY `film_code` (`film_code`),
+  ADD KEY `id_studio` (`id_studio`);
 
 --
 -- Indeks untuk tabel `studios`
@@ -218,7 +223,8 @@ ALTER TABLE `studios`
 -- Indeks untuk tabel `tickets`
 --
 ALTER TABLE `tickets`
-  ADD PRIMARY KEY (`code_ticket`);
+  ADD PRIMARY KEY (`code_ticket`),
+  ADD KEY `chair_id` (`chair_id`);
 
 --
 -- Indeks untuk tabel `toppings`
@@ -230,19 +236,26 @@ ALTER TABLE `toppings`
 -- Indeks untuk tabel `transactions`
 --
 ALTER TABLE `transactions`
-  ADD PRIMARY KEY (`code_transaction`);
+  ADD PRIMARY KEY (`code_transaction`),
+  ADD KEY `operator_id` (`operator_id`),
+  ADD KEY `customer_id` (`customer_id`),
+  ADD KEY `ticket_code` (`ticket_code`),
+  ADD KEY `topping_id` (`topping_id`),
+  ADD KEY `schedule_id` (`schedule_id`);
 
 --
 -- Indeks untuk tabel `users`
 --
 ALTER TABLE `users`
-  ADD PRIMARY KEY (`id_user`);
+  ADD PRIMARY KEY (`id_user`),
+  ADD KEY `role_id` (`role_id`);
 
 --
 -- Indeks untuk tabel `user_balances`
 --
 ALTER TABLE `user_balances`
-  ADD PRIMARY KEY (`id_balance`);
+  ADD PRIMARY KEY (`id_balance`),
+  ADD KEY `id_user` (`id_user`);
 
 --
 -- Indeks untuk tabel `user_roles`
@@ -259,6 +272,12 @@ ALTER TABLE `user_roles`
 --
 ALTER TABLE `chairs`
   MODIFY `id_chair` int(5) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT untuk tabel `companies`
+--
+ALTER TABLE `companies`
+  MODIFY `id_company` int(5) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT untuk tabel `genres`
@@ -306,7 +325,7 @@ ALTER TABLE `transactions`
 -- AUTO_INCREMENT untuk tabel `users`
 --
 ALTER TABLE `users`
-  MODIFY `id_user` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_user` int(5) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT untuk tabel `user_balances`
@@ -318,7 +337,53 @@ ALTER TABLE `user_balances`
 -- AUTO_INCREMENT untuk tabel `user_roles`
 --
 ALTER TABLE `user_roles`
-  MODIFY `id_role` smallint(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_role` smallint(1) NOT NULL AUTO_INCREMENT;
+
+--
+-- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
+--
+
+--
+-- Ketidakleluasaan untuk tabel `movies`
+--
+ALTER TABLE `movies`
+  ADD CONSTRAINT `movies_ibfk_1` FOREIGN KEY (`genre_id`) REFERENCES `genres` (`id_genre`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `movies_ibfk_2` FOREIGN KEY (`company_id`) REFERENCES `companies` (`id_company`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Ketidakleluasaan untuk tabel `schedules`
+--
+ALTER TABLE `schedules`
+  ADD CONSTRAINT `schedules_ibfk_1` FOREIGN KEY (`id_studio`) REFERENCES `studios` (`id_studio`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `schedules_ibfk_2` FOREIGN KEY (`film_code`) REFERENCES `movies` (`code_film`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Ketidakleluasaan untuk tabel `tickets`
+--
+ALTER TABLE `tickets`
+  ADD CONSTRAINT `tickets_ibfk_1` FOREIGN KEY (`chair_id`) REFERENCES `chairs` (`id_chair`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Ketidakleluasaan untuk tabel `transactions`
+--
+ALTER TABLE `transactions`
+  ADD CONSTRAINT `transactions_ibfk_1` FOREIGN KEY (`topping_id`) REFERENCES `toppings` (`id_topping`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `transactions_ibfk_2` FOREIGN KEY (`schedule_id`) REFERENCES `schedules` (`id_schedule`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `transactions_ibfk_3` FOREIGN KEY (`ticket_code`) REFERENCES `tickets` (`code_ticket`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `transactions_ibfk_4` FOREIGN KEY (`customer_id`) REFERENCES `users` (`id_user`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `transactions_ibfk_5` FOREIGN KEY (`operator_id`) REFERENCES `users` (`id_user`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Ketidakleluasaan untuk tabel `users`
+--
+ALTER TABLE `users`
+  ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `user_roles` (`id_role`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Ketidakleluasaan untuk tabel `user_balances`
+--
+ALTER TABLE `user_balances`
+  ADD CONSTRAINT `user_balances_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `users` (`id_user`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -5,7 +5,7 @@ db = mysql.connector.connect(
     host='localhost',
     user='root',
     password='',
-    database='tiketin'
+    database='phpmyadmin'
     )
 
 if db.is_connected():

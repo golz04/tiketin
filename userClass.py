@@ -1,6 +1,25 @@
 import connection
 from connection import cursor
 
+
+class login:
+    def __init__(self, username, password, role):
+        self.username = username
+        self.password = password
+        self.role = role
+
+    def set_role(self):
+        read = '''
+        SELECT role_id FROM `users` WHERE username = %s && password = %s
+        '''
+        val =(self.username, self.password)
+        cursor.execute(read, val)
+        for data in cursor.fetchall():
+            self.role = data[0]
+    
+    def get_role(self):
+        return self.role
+
 class roles:
     def __init__(self, id_role, role_name):
         self.id_role = id_role
@@ -84,5 +103,6 @@ class admin(roles):
 
 if __name__ == "__main__":
     #tes drive aja ntar diapus ya ;)
-    sadmin = admin(1,1)
-    sadmin.sql_execute(sadmin.add_user())
+    loginn = login('admin', 'admin', 0)
+    loginn.set_role()
+    print(loginn.role)

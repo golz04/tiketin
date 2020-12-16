@@ -12,3 +12,6 @@ if db.is_connected():
     print("databse is connected")
 else:
     print("connection error")
+
+global cursor
+cursor = db.cursor()

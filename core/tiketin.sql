@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 16, 2020 at 12:46 PM
+-- Generation Time: Dec 16, 2020 at 09:52 PM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.2.34
 
@@ -76,10 +76,10 @@ CREATE TABLE `companies` (
 --
 
 INSERT INTO `companies` (`id_company`, `company_name`, `address`) VALUES
-(1, 'Universal studios', 'Universal Pictures adalah studio film Amerika yang dimiliki oleh Comcast melalui divisi Universal Filmed Entertainment Group dari anak perusahaannya yang sepenuhnya dimiliki NBCUniversal.'),
-(2, '20th century studios', 'Twentieth Century Studios, Inc. adalah studio film Amerika yang merupakan anak perusahaan dari The Walt Disney Studios, sebuah divisi dari The Walt Disney Company. Studio ini terletak di Fox Studio Lot di area Century City di Los Angeles'),
-(3, 'Warner Bros', 'Warner Bros. Entertainment, Inc. adalah salah satu produser film dan televisi terbesar di dunia. Sekarang merupakan anak perusahaan dari grup Time Warner yang bermarkas di Burbank, California, Amerika Serikat. Warner Bros. juga memiliki sejumlah anak perusahaan, termasuk Warner Bros. Studios, Warner Bros'),
-(4, 'The Walt Disney Company', 'The Walt Disney Company adalah perusahaan konglomerat di bidang hiburan dan media terbesar di dunia. Didirikan pada 16 Oktober 1923, perusahaan ini didirikan oleh Walt Disney dan Roy Oliver Disney dengan nama Disney Brothers Cartoon Studio. Pusatnya terletak di Burbank, California.');
+(1, 'Universal studios', 'US'),
+(2, '20th century studios', 'LA'),
+(3, 'Warner Bros', 'California'),
+(4, 'The Walt Disney Company', 'Burbank, California.');
 
 -- --------------------------------------------------------
 
@@ -122,7 +122,7 @@ CREATE TABLE `movies` (
 
 INSERT INTO `movies` (`code_film`, `title`, `genre_id`, `company_id`) VALUES
 (1, 'TENET', 1, 3),
-(2, 'A Beautifull Mind', 5, 1);
+(2, 'babadook', 3, 1);
 
 -- --------------------------------------------------------
 
@@ -132,12 +132,19 @@ INSERT INTO `movies` (`code_film`, `title`, `genre_id`, `company_id`) VALUES
 
 CREATE TABLE `schedules` (
   `id_schedule` int(5) NOT NULL,
-  `date_schedule` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `date_schedule` date NOT NULL DEFAULT current_timestamp(),
   `start` time NOT NULL,
   `end` time NOT NULL,
   `film_code` int(10) NOT NULL,
   `id_studio` int(5) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `schedules`
+--
+
+INSERT INTO `schedules` (`id_schedule`, `date_schedule`, `start`, `end`, `film_code`, `id_studio`) VALUES
+(1, '2020-12-17', '09:00:00', '11:00:00', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -219,7 +226,7 @@ CREATE TABLE `transactions` (
 CREATE TABLE `users` (
   `id_user` int(5) NOT NULL,
   `name` varchar(50) NOT NULL,
-  `email` varchar(50) NOT NULL,
+  `username` varchar(50) NOT NULL,
   `password` varchar(32) NOT NULL,
   `gender` enum('L','P') NOT NULL,
   `contact` varchar(13) NOT NULL,
@@ -231,12 +238,9 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id_user`, `name`, `email`, `password`, `gender`, `contact`, `address`, `role_id`) VALUES
+INSERT INTO `users` (`id_user`, `name`, `username`, `password`, `gender`, `contact`, `address`, `role_id`) VALUES
 (1, 'admin', 'admin', 'admin', 'L', 'admin', '', 1),
-(2, 'dummy', 'dummy', 'dummy', 'L', 'dummy', 'dummy', 2),
-(3, 'oviiii', 'yes@gmail.com', 'oviii', 'L', 'asd', 'asd', 2),
-(8, '9', '9', '9', 'L', '9', '9', 1),
-(9, '4', '4', '4', 'L', '4', '4', 1);
+(2, 'dummy', 'dummy', 'dummy', 'L', 'dummy', 'dummy', 2);
 
 -- --------------------------------------------------------
 
@@ -396,7 +400,7 @@ ALTER TABLE `movies`
 -- AUTO_INCREMENT for table `schedules`
 --
 ALTER TABLE `schedules`
-  MODIFY `id_schedule` int(5) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_schedule` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `studios`

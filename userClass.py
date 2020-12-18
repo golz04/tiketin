@@ -1,6 +1,116 @@
 import connection
 from connection import cursor
+from prettytable import PrettyTable
 
+class permission:
+    access = False
+    temporary_data =[]
+    def __init__(self, role_id):
+        self.role_id = role_id
+
+    def set_role_id(self, role_id):
+        self.role_id = role_id
+
+    def set_permission(self):
+        if self.role_id == 1:
+            self.access = True
+        if self.role_id ==2:
+            self.access = False
+    
+    def get_permission(self):
+        return self.access
+
+    def add_permission(self):
+        pass
+
+    def edit_permission(self):
+        pass
+
+    def delete_permission(self):
+        pass
+
+    def search_permission(self):
+        pass
+
+    def get_users_data(self):
+        read='SELECT * FROM users'
+        cursor.execute(read)
+        a = cursor.fetchall()
+        for data in a:
+            self.temporary_data.append(data)
+        table = PrettyTable(['id','name', 'username', 'password', ' gender', ' contact', 'address', 'role id'])
+        table.add_rows(a)
+        return table        
+
+    def get_roles_data(self):
+        read='SELECT * FROM user_roles'
+        cursor.execute(read)
+        a = cursor.fetchall()
+        for data in a:
+            self.temporary_data.append(data)
+        table = PrettyTable(['id','nama roles'])
+        table.add_rows(a)
+        return table
+    
+    def get_chairs_data(self):
+        read='SELECT * FROM chairs'
+        cursor.execute(read)
+        a = cursor.fetchall()
+        for data in a:
+            self.temporary_data.append(data)
+        table = PrettyTable(['id','number','status'])
+        table.add_rows(a)
+        return table
+
+    def get_companies_data(self):
+        read='SELECT * FROM companies'
+        cursor.execute(read)
+        a = cursor.fetchall()
+        for data in a:
+            self.temporary_data.append(data)
+        table = PrettyTable(['id','company name','address'])
+        table.add_rows(a)
+        return table
+            
+    def get_genres_data(self):
+        read='SELECT * FROM genres'
+        cursor.execute(read)
+        a = cursor.fetchall()
+        for data in a:
+            self.temporary_data.append(data)
+        table = PrettyTable(['id','genre name'])
+        table.add_rows(a)
+        return table
+
+    def get_movies_data(self):
+        read='SELECT * FROM movies'
+        cursor.execute(read)
+        a = cursor.fetchall()
+        for data in a:
+            self.temporary_data.append(data)
+        table = PrettyTable(['id', 'title', 'genre', 'company'])
+        table.add_rows(a)
+        return table
+            
+    def get_schedules_data(self):
+        read='SELECT * FROM schedules'
+        cursor.execute(read)
+        a = cursor.fetchall()
+        for data in a:
+            self.temporary_data.append(data)
+        table= PrettyTable(['id', 'date', 'start', 'ends', 'movie', 'studio'])
+        table.add_rows(a)
+        return table
+
+    def get_studio_data(self):
+        read='SELECT * FROM studios'
+        cursor.execute(read)
+        a = cursor.fetchall()
+        for data in a:
+            self.temporary_data.append(data)
+        table= PrettyTable(['id', 'studio', 'description'])
+        table.add_rows(a)
+        return table
 
 class login:
     def __init__(self, username, password, role):
@@ -20,25 +130,9 @@ class login:
     def get_role(self):
         return self.role
 
-class roles:
-    def __init__(self, id_role, role_name):
-        self.id_role = id_role
-        self.role_name = role_name
-    
-    def add_role(self):
-        pass
-
-    def edit_role(self):
-        pass
-
-    def delete_role(self):
-        pass
-
-
-class admin(roles):
-    def __init__(self, id_user, password):
-        self.id_user = id_user
-        self.password = password
+class admin(login):
+    def __init__(self, username, password, role):
+        super().__init__(username, password, role)
     
     def add_user(self):
         ulang = True
@@ -102,7 +196,6 @@ class admin(roles):
             print('error gan')
 
 if __name__ == "__main__":
-    #tes drive aja ntar diapus ya ;)
-    loginn = login('admin', 'admin', 0)
-    loginn.set_role()
-    print(loginn.role)
+    permisi = permission(0)
+    print(permisi.get_users_data())
+    print(permisi.temporary_data)

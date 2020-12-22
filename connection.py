@@ -1,6 +1,5 @@
 import mysql.connector
 
-
 db = mysql.connector.connect(
     host='localhost',
     user='root',
@@ -15,3 +14,5 @@ else:
 
 global cursor
 cursor = db.cursor()
+
+

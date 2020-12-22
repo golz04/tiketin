@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 16, 2020 at 09:52 PM
+-- Generation Time: Dec 22, 2020 at 02:10 AM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.2.34
 
@@ -30,34 +30,60 @@ SET time_zone = "+00:00";
 CREATE TABLE `chairs` (
   `id_chair` int(5) NOT NULL,
   `chair_number` varchar(5) NOT NULL,
-  `status` tinyint(1) NOT NULL
+  `status` tinyint(1) NOT NULL,
+  `studio_id` int(5) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `chairs`
 --
 
-INSERT INTO `chairs` (`id_chair`, `chair_number`, `status`) VALUES
-(1, 'A1', 0),
-(2, 'A2', 0),
-(3, 'A3', 0),
-(4, 'A4', 0),
-(5, 'B1', 0),
-(6, 'B2', 0),
-(7, 'B3', 0),
-(8, 'B4', 0),
-(9, 'C1', 0),
-(10, 'C2', 0),
-(11, 'C3', 0),
-(12, 'C4', 0),
-(13, 'D1', 0),
-(14, 'D2', 0),
-(15, 'D3', 0),
-(16, 'D4', 0),
-(17, 'E1', 0),
-(18, 'E2', 0),
-(19, 'E3', 0),
-(20, 'E4', 0);
+INSERT INTO `chairs` (`id_chair`, `chair_number`, `status`, `studio_id`) VALUES
+(114, 'A01', 0, 1),
+(115, 'A02', 0, 1),
+(116, 'A03', 0, 1),
+(117, 'A04', 0, 1),
+(118, 'A05', 0, 1),
+(119, 'A06', 0, 1),
+(120, 'A07', 0, 1),
+(121, 'A08', 0, 1),
+(122, 'A09', 0, 1),
+(123, 'A010', 0, 1),
+(124, 'A011', 0, 1),
+(125, 'A012', 0, 1),
+(126, 'A013', 0, 1),
+(127, 'A014', 0, 1),
+(128, 'A015', 0, 1),
+(129, 'B01', 0, 2),
+(130, 'B02', 0, 2),
+(131, 'B03', 0, 2),
+(132, 'B04', 0, 2),
+(133, 'B05', 0, 2),
+(134, 'B06', 0, 2),
+(135, 'B07', 0, 2),
+(136, 'B08', 0, 2),
+(137, 'B09', 0, 2),
+(138, 'B010', 0, 2),
+(139, 'B011', 0, 2),
+(140, 'B012', 0, 2),
+(141, 'B013', 0, 2),
+(142, 'B014', 0, 2),
+(143, 'B015', 0, 2),
+(144, 'Y01', 0, 3),
+(145, 'Y02', 0, 3),
+(146, 'Y03', 0, 3),
+(147, 'Y04', 0, 3),
+(148, 'Y05', 0, 3),
+(149, 'Y06', 0, 3),
+(150, 'Y07', 0, 3),
+(151, 'Y08', 0, 3),
+(152, 'Y09', 0, 3),
+(153, 'Y010', 0, 3),
+(154, 'Y011', 0, 3),
+(155, 'Y012', 0, 3),
+(156, 'Y013', 0, 3),
+(157, 'Y014', 0, 3),
+(158, 'Y015', 0, 3);
 
 -- --------------------------------------------------------
 
@@ -122,7 +148,8 @@ CREATE TABLE `movies` (
 
 INSERT INTO `movies` (`code_film`, `title`, `genre_id`, `company_id`) VALUES
 (1, 'TENET', 1, 3),
-(2, 'babadook', 3, 1);
+(2, 'babadook', 3, 1),
+(3, 'Aku Bukan Milik Mu', 2, 1);
 
 -- --------------------------------------------------------
 
@@ -197,9 +224,9 @@ CREATE TABLE `toppings` (
 
 INSERT INTO `toppings` (`id_topping`, `topping_name`, `price`) VALUES
 (1, 'popcorn', 35000),
-(2, 'sprite', 10000),
 (3, 'corndog', 25000),
-(4, 'air mineral', 10000);
+(4, 'air mineral', 10000),
+(5, 'Coca-Cola', 10000);
 
 -- --------------------------------------------------------
 
@@ -240,7 +267,9 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id_user`, `name`, `username`, `password`, `gender`, `contact`, `address`, `role_id`) VALUES
 (1, 'admin', 'admin', 'admin', 'L', 'admin', '', 1),
-(2, 'dummy', 'dummy', 'dummy', 'L', 'dummy', 'dummy', 2);
+(2, 'dummy', 'dummy', 'dummy', 'L', 'dummy', 'dummy', 2),
+(11, 'asd', 'asd', 'asd', 'L', 'asd', 'asd', 1),
+(14, 'qwe', 'qwe', 'qwe', 'P', 'qwe', 'qwe', 2);
 
 -- --------------------------------------------------------
 
@@ -288,7 +317,8 @@ INSERT INTO `user_roles` (`id_role`, `role_name`) VALUES
 -- Indexes for table `chairs`
 --
 ALTER TABLE `chairs`
-  ADD PRIMARY KEY (`id_chair`);
+  ADD PRIMARY KEY (`id_chair`),
+  ADD KEY `studio_id` (`studio_id`);
 
 --
 -- Indexes for table `companies`
@@ -376,7 +406,7 @@ ALTER TABLE `user_roles`
 -- AUTO_INCREMENT for table `chairs`
 --
 ALTER TABLE `chairs`
-  MODIFY `id_chair` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id_chair` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=159;
 
 --
 -- AUTO_INCREMENT for table `companies`
@@ -394,13 +424,13 @@ ALTER TABLE `genres`
 -- AUTO_INCREMENT for table `movies`
 --
 ALTER TABLE `movies`
-  MODIFY `code_film` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `code_film` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `schedules`
 --
 ALTER TABLE `schedules`
-  MODIFY `id_schedule` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_schedule` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `studios`
@@ -418,7 +448,7 @@ ALTER TABLE `tickets`
 -- AUTO_INCREMENT for table `toppings`
 --
 ALTER TABLE `toppings`
-  MODIFY `id_topping` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_topping` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `transactions`
@@ -430,7 +460,7 @@ ALTER TABLE `transactions`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id_user` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id_user` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `user_balances`
@@ -447,6 +477,12 @@ ALTER TABLE `user_roles`
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `chairs`
+--
+ALTER TABLE `chairs`
+  ADD CONSTRAINT `chairs_ibfk_1` FOREIGN KEY (`studio_id`) REFERENCES `studios` (`id_studio`);
 
 --
 -- Constraints for table `movies`

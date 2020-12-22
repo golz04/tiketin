@@ -1,6 +1,13 @@
+from os import read
 import connection
 from connection import cursor
 from prettytable import PrettyTable
+
+def sql_execute(temporary):
+    cursor.execute(temporary[0], temporary[1])
+    connection.db.commit()
+    print('esekusi sukses')
+
 
 class permission:
     access = False
@@ -112,6 +119,17 @@ class permission:
         table.add_rows(a)
         return table
 
+    def get_topping_data(self):
+        read='SELECT * FROM toppings'
+        cursor.execute(read)
+        a = cursor.fetchall()
+        for data in a:
+            self.temporary_data.append(data)
+        table= PrettyTable(['id', 'nama topping', 'harga'])
+        table.add_rows(a)
+        return table
+
+
 class login:
     def __init__(self, username, password, role):
         self.username = username
@@ -130,16 +148,33 @@ class login:
     def get_role(self):
         return self.role
 
+
 class admin(login):
     def __init__(self, username, password, role):
         super().__init__(username, password, role)
+
+    @staticmethod
+    def menu():
+        print('\t\t'+'='*8+'input data'+'='*8)
+        print('\t\t1. add user')
+        print('\t\t2. add movie')
+        print('\t\t3. add schedule')
+        print('\t\t4. add topping')
+        print('\t\t'+'='*8+'hapus data'+'='*8)
+        print('\t\t5. hapus user')
+        print('\t\t6. hapus movie')
+        print('\t\t7. hapus schedule')
+        print('\t\t8. hapus topping')
+        n = int(input('masukan pilihan : '))
+        return n
     
-    def add_user(self):
+    @staticmethod
+    def add_user():
         ulang = True
         #memasukan nama
         name = input('masukan nama : ')
         #memasukan email
-        email = input('masukan email : ')
+        username = input('masukan username : ')
         #memasukan password
         while ulang == True:
             password = input('masukan password : ')
@@ -166,36 +201,92 @@ class admin(login):
             print('{}\t{}'.format(data[0], data[1]))
         role_id = int(input('masukan role id : '))
 
-        sql = 'INSERT INTO users (id_user, name, email, password, gender, contact, address, role_id) VALUES (NULL, %s, %s, %s, %s, %s, %s, %s)'
-        val = (name, email, password, gender, contact, alamat, role_id)
-        sqlQuery = [sql, val]
+        sql = 'INSERT INTO users (id_user, name, username, password, gender, contact, address, role_id) VALUES (NULL, %s, %s, %s, %s, %s, %s, %s)'
+        val = (name, username, password, gender, contact, alamat, role_id)
+        sqlQuery = (sql, val)
         return  sqlQuery
 
+    @staticmethod
+    def add_schedule(movie_data, studio_data):
+        tanggal = int(input('masukan tanggal (numerik): '))
+        bulan = int(input('masukan bulan (numerik): '))
+        tahun = int(input('masukan tanggal (numerik): '))
+        date = '{}-{}-{}'.format(tahun, bulan, tanggal)
+        startInput = input('masukan jam film mulai(jam:menit) : ')
+        start = '{}:00'.format(startInput)
+        endInput = input('masukan jam film selesai(jam:menit) : ')
+        end = '{}:00'.format(endInput)
+        print(movie_data)
+        film = int(input('masukan id film : '))
+        print(studio_data)
+        studio = int(input('masukan id studio : '))
+        sql = 'INSERT INTO schedules (id_schedule, date_schedule, start, end, film_code, id_studio) VALUES (NULL, %s, %s, %s, %s, %s)'
+        val = (date, start, end, film, studio)
+        sqlQuery = (sql, val)
+        return sqlQuery
 
-    def add_schedule(self):
-        pass
-
-    def add_movie(self):
-        pass
-
-    def delete_movie(self):
-        pass
-
-    def delete_schedule(self):
-        pass
-
-    def add_topping(self):
-        pass
+    @staticmethod
+    def add_movie(genre_data, company_data):
+        judul = input('masukan judul film : ')
+        print(genre_data)
+        genre = int(input('masukan id genre : '))
+        print(company_data)
+        company = int(input('masukan id company : '))
+        sql = 'INSERT INTO movies (code_film, title, genre_id, company_id) VALUES (NULL, %s, %s, %s)'
+        val = (judul, genre, company)
+        sqlQuery = (sql, val)
+        return sqlQuery
     
-    def sql_execute(self, temporary):
-        try:
-            cursor.execute(temporary[0], temporary[1])
-            connection.db.commit()
-            print('input sukses')
-        except:
-            print('error gan')
+    @staticmethod
+    def add_topping():
+        topping = input('masukan nama snack/minuman : ')
+        harga = int(input('masukan harga : '))
+        sql = 'INSERT INTO toppings (id_topping, topping_name, price) VALUES (NULL, %s, %s)'
+        val = (topping, harga)
+        sqlQuery = (sql, val)
+        return sqlQuery
 
+    @staticmethod
+    def delete_movie(movie_data):
+        print(movie_data)
+        n = int(input('masukan id yang ingin dihapus : '))
+        sql = 'DELETE FROM movies WHERE code_film = %s'
+        val = (n,)
+        sqlQuery = (sql, val)
+        return sqlQuery
+    
+    @staticmethod
+    def delete_schedule(schedule_data):
+        print(schedule_data)
+        n = int(input('masukan id yang ingin dihapus : '))
+        sql = 'DELETE FROM schedules WHERE id_schedule = %s'
+        val = (n,)
+        sqlQuery = (sql, val)
+        return sqlQuery
+
+    @staticmethod
+    def delete_user(user_data):
+        print(user_data)
+        n = int(input('masukan id yang ingin dihapus : '))
+        sql = 'DELETE FROM users WHERE id_user = %s'
+        val = (n,)
+        sqlQuery = (sql, val)
+        return sqlQuery
+
+    @staticmethod
+    def delete_topping(topping_data):
+        print(topping_data)
+        n = int(input('masukan id yang ingin dihapus : '))
+        sql = '''DELETE FROM toppings WHERE id_topping = %s'''
+        val = (n,)
+        sqlQuery = (sql, val)
+        return sqlQuery
+
+
+class user(login):
+    def __init__(self, username, password, role):
+        super().__init__(username, password, role)
+        
 if __name__ == "__main__":
-    permisi = permission(0)
+    permisi = permission(1)
     print(permisi.get_users_data())
-    print(permisi.temporary_data)

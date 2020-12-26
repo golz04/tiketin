@@ -5,6 +5,7 @@ from userClass import sql_execute
 
 permisi = userClass.permission(0)
 login_status = False
+data_login = []
 time.sleep(1)
 os.system('cls')
 while True:
@@ -17,6 +18,7 @@ while True:
     for i in range(len(permisi.temporary_data)):
         if username in permisi.temporary_data[i]:
             if password in permisi.temporary_data[i]:
+                data_login = permisi.temporary_data[i]
                 login_status = True
                 get_role = permisi.temporary_data[i][7]
                 break
@@ -96,6 +98,12 @@ if loginn.get_role() == 1:
 
 elif loginn.get_role() == 2:
     myUser = userClass.user(username, password, loginn.get_role())
-    print('yolooo')
+    while True:
+        print('\n\t\t  -LOGIN as Customer-')
+        print('\t\t  Hi -', data_login[1])
+
+        print(permisi.get_schedules_today())
+        userMenu = myUser.menu()
+
 else:
     print('user tidak memiliki role')

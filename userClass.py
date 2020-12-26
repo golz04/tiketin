@@ -109,6 +109,16 @@ class permission:
         table.add_rows(a)
         return table
 
+    def get_schedules_today(self):
+        read = 'SELECT schedules.id_schedule, movies.title, schedules.date_schedule, schedules.start, schedules.end, studios.studio_name FROM schedules INNER JOIN movies ON schedules.film_code = movies.code_film INNER JOIN studios ON schedules.id_studio = studios.id_studio'
+        cursor.execute(read)
+        fetch = cursor.fetchall()
+        for data in fetch:
+            self.temporary_data.append(data)
+        table = PrettyTable(['ID Jadwal', 'Nama Film', 'Tanggal Film', 'Mulai', 'Selesai', 'Studio'])
+        table.add_rows(fetch)
+        return table
+
     def get_studio_data(self):
         read='SELECT * FROM studios'
         cursor.execute(read)
@@ -286,7 +296,14 @@ class admin(login):
 class user(login):
     def __init__(self, username, password, role):
         super().__init__(username, password, role)
+
+    @staticmethod
+    def menu():
+        print('\t\t'+'='*8+'input data'+'='*8)
+        print('\t\t1. See schedule movie')
+        n = int(input('masukan pilihan : '))
+        return n
         
 if __name__ == "__main__":
     permisi = permission(1)
-    print(permisi.get_users_data())
+    print(permisi.get_schedules_today())

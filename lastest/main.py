@@ -1,19 +1,13 @@
 import os
 import time
+import userClass
+from userClass import sql_execute
 
-import modelPermission
-import modelLogin
-import controllerAdmin
-import controllerCustomer
-
-from modelExec import sql_execute
-
-permisi = modelPermission.permission(0)
+permisi = userClass.permission(0)
 login_status = False
 data_login = []
 time.sleep(1)
 os.system('cls')
-
 while True:
     print('=+='*20)
     print('\t\t\t-LOGIN-')
@@ -36,12 +30,12 @@ while True:
         os.system('cls')
 
 permisi.set_role_id(get_role)
-loginn = modelLogin.login(username, password, permisi.role_id)
+loginn = userClass.login(username, password, permisi.role_id)
 time.sleep(1)
 os.system('cls')
 
 if loginn.get_role() == 1:
-    sadmin = controllerAdmin.admin(username, password, loginn.get_role())
+    sadmin = userClass.admin(username, password, loginn.get_role())
     while True:
         print('\n\t\t  -LOGIN as ADMIN-')
         menuInput = sadmin.menu()
@@ -103,27 +97,13 @@ if loginn.get_role() == 1:
             os.system('cls')
 
 elif loginn.get_role() == 2:
-    myUser = controllerCustomer.user(username, password, loginn.get_role())
+    myUser = userClass.user(username, password, loginn.get_role())
     while True:
         print('\n\t\t  -LOGIN as Customer-')
         print('\t\t  Hi -', data_login[1])
 
+        print(permisi.get_schedules_today())
         userMenu = myUser.menu()
-        if(userMenu == 1):
-            os.system('cls')
-            print(permisi.get_schedules_all())
-            time.sleep(1)
-            os.system('cls')
-        elif(userMenu == 2):
-            os.system('cls')
-            print(permisi.get_topping_data())
-            time.sleep(1)
-            os.system('cls')
-        elif(userMenu == 3):
-            os.system('cls')
-            sql_execute(myUser.boking(permisi.get_schedules_today()))
-            time.sleep(1)
-            os.system('cls')
 
 else:
     print('user tidak memiliki role')

@@ -151,3 +151,14 @@ class permission:
         table = PrettyTable(['ID Jadwal', 'Nama Film', 'Tanggal Film', 'Mulai', 'Selesai', 'Studio'])
         table.add_rows(fetch)
         return table
+
+    def get_chairs_free(self, thisStudio):
+        thisStudios = thisStudio
+        read = 'SELECT chairs.id_chair, chairs.chair_number, studios.studio_name FROM chairs INNER JOIN studios ON chairs.studio_id = studios.id_studio WHERE chairs.status = 0 AND studios.studio_name = %s'
+        cursor.execute(read, (thisStudios, ))
+        fetch = cursor.fetchall()
+        for data in fetch:
+            self.temporary_data.append(data)
+        table = PrettyTable(['ID Kursi', 'Nomor Kursi', 'Nama Studio'])
+        table.add_rows(fetch)
+        return table

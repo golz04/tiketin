@@ -25,6 +25,7 @@ while True:
         if username in permisi.temporary_data[i]:
             if password in permisi.temporary_data[i]:
                 data_login = permisi.temporary_data[i]
+                controllerCustomer.cusLog = permisi.temporary_data[i]
                 login_status = True
                 get_role = permisi.temporary_data[i][7]
                 break
@@ -121,7 +122,7 @@ elif loginn.get_role() == 2:
             os.system('cls')
         elif(userMenu == 3):
             os.system('cls')
-            sql_execute(myUser.boking(permisi.get_schedules_today()))
+            sql_execute(myUser.boking(permisi.get_schedules_today(), permisi.get_topping_data()))
             time.sleep(1)
             os.system('cls')
 

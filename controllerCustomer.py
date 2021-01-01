@@ -32,8 +32,8 @@ class user(login):
         ulang = True
         print(schedule_now)
         getStudio = ''
-        kodeTransact = mRandomCode.randomTransaction(10);
-        kodeTicket = mRandomCode.randomTransaction(10);
+        kodeTransact = mRandomCode.randomTransaction(5);
+        kodeTicket = mRandomCode.randomTransaction(5);
         dateNow = date.today().strftime("%d/%m/%Y")
         toppingID = 0
 
@@ -65,7 +65,7 @@ class user(login):
 
         chairID = int(input("Masukkan ID Pilihan Kursi :"))
         # ============================================================
-        cmdInsert = '''INSERT INTO transactions (code_transaction, order_date, operator_id, customer_id, ticket_code, topping_id, schedule_id) VALUES (%s, 'now()', %s, %s, %s, %s, %s)'''
+        cmdInsert = '''INSERT INTO transactions (code_transaction, order_date, operator_id, customer_id, ticket_code, topping_id, schedule_id) VALUES (%s, NOW(), %s, %s, %s, %s, %s)'''
         valInsert = (kodeTransact, '', cusLog[0], kodeTicket, toppingID, scheduleID)
         cursor.execute(cmdInsert, valInsert)
         mConnection.db.commit()
@@ -78,5 +78,8 @@ class user(login):
         cmdUpdate = '''UPDATE chairs SET status = 1 WHERE id_chair = %s'''
         valUpdate = (chairID,)
         executed = (cmdUpdate, valUpdate)
+
+        kodeTransact = mRandomCode.randomTransaction(10);
+        kodeTicket = mRandomCode.randomTransaction(10);
 
         return executed

@@ -5,6 +5,7 @@ import modelPermission
 import modelLogin
 import controllerAdmin
 import controllerCustomer
+import controllerOperator
 
 from modelExec import sql_execute
 
@@ -26,6 +27,7 @@ while True:
             if password in permisi.temporary_data[i]:
                 data_login = permisi.temporary_data[i]
                 controllerCustomer.cusLog = permisi.temporary_data[i]
+                controllerOperator.opLog = permisi.temporary_data[i]
                 login_status = True
                 get_role = permisi.temporary_data[i][7]
                 break
@@ -45,6 +47,7 @@ if loginn.get_role() == 1:
     sadmin = controllerAdmin.admin(username, password, loginn.get_role())
     while True:
         print('\n\t\t  -LOGIN as ADMIN-')
+        print('\t\t  Hi -', data_login[1])
         menuInput = sadmin.menu()
 
         #tambah user
@@ -125,6 +128,48 @@ elif loginn.get_role() == 2:
             sql_execute(myUser.boking(permisi.get_schedules_today(), permisi.get_topping_data()))
             time.sleep(1)
             os.system('cls')
+elif loginn.get_role() == 3:
+    myOp = controllerOperator.op(username, password, loginn.get_role())
+    while True:
+        print()
+        print('\n\t\t  -LOGIN as Operator-')
+        print('\t\t  Hi -', data_login[1])
 
+        operatorMenu = myOp.menu()
+        if(operatorMenu == 1):
+            os.system('cls')
+            print(permisi.get_ticket_pending())
+            time.sleep(1)
+            os.system('cls')
+        elif(operatorMenu == 2):
+            os.system('cls')
+            sql_execute(myOp.confirm_ticket(permisi.get_ticket_pending()))
+            time.sleep(1)
+            os.system('cls')
+        elif(operatorMenu == 3):
+            os.system('cls')
+            print(permisi.get_ticket_done())
+            time.sleep(1)
+            os.system('cls')
+        elif(operatorMenu == 4):
+            os.system('cls')
+            sql_execute(myOp.add_movie(permisi.get_genres_data(), permisi.get_companies_data()))
+            print(permisi.get_movies_data())
+            time.sleep(1)
+            os.system('cls')
+        elif(operatorMenu == 5):
+            os.system('cls')
+            sql_execute(myOp.add_schedule(permisi.get_movies_data(), permisi.get_studio_data()))
+            print(permisi.get_schedules_all())
+            time.sleep(1)
+            os.system('cls')
+        elif(operatorMenu == 6):
+            os.system('cls')
+            sql_execute(sadmin.add_topping())
+            print(permisi.get_topping_data())
+            time.sleep(1)
+            os.system('cls')
+        elif(operatorMenu == 7):
+            print("Belum")
 else:
     print('user tidak memiliki role')

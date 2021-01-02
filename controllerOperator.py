@@ -6,9 +6,12 @@ from mConnection import cursor
 from prettytable import PrettyTable
 from modelLogin import login
 
+import modelPermission
+
 opLog = []
 
 class op(login):
+    user_balance = 0
     def __init__(self, username, password, role):
         super().__init__(username, password, role)
 
@@ -74,3 +77,20 @@ class op(login):
         val = (topping, harga)
         sqlQuery = (sql, val)
         return sqlQuery
+
+    def add_amount(self, balances):
+        print(balances)
+        idBalance = int(input("Masukkan ID saldo yang ingin ditambahkan  : "))
+        banyakSaldo = int(input("Masukkan total saldo yang ingin ditambahkan : "))
+
+        read ='SELECT amount FROM user_balances WHERE id_balance =%s'
+        v =(idBalance,)
+        cursor.execute(read,v)
+        a = cursor.fetchone()
+        self.user_balance = a[0]
+
+        total = self.user_balance + banyakSaldo
+        sql = 'UPDATE user_balances SET amount = %s WHERE id_balance = %s'
+        v = (total, idBalance,)
+        execute = (sql, v)
+        return execute

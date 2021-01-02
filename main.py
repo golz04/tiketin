@@ -254,7 +254,8 @@ while True:
                 os.system('cls')
             elif(operatorMenu == 7):
                 os.system('cls')
-                print("under construction")
+                #print(permisi.get_user_balances())
+                sql_execute(myOp.add_amount(permisi.get_user_balances()))
                 time.sleep(1)
                 os.system('cls')
 
@@ -262,7 +263,6 @@ while True:
             elif operatorMenu == 0:
                 os.system('cls')
                 login_status = False
-                del myOp
                 print('mencoba log out...')
                 time.sleep(1)
                 os.system('cls')

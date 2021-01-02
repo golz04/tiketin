@@ -181,7 +181,7 @@ class permission:
         return table
 
     def get_ticket_done(self):
-        read = 'SELECT transactions.code_transaction, transactions.order_date, users.username, users.name, transactions.ticket_code, tickets.chair_id, transactions.topping_id, movies.title, schedules.date_schedule, schedules.start, schedules.end FROM transactions INNER JOIN users ON transactions.customer_id = users.id_user INNER JOIN tickets ON transactions.ticket_code = tickets.code_ticket INNER JOIN schedules ON transactions.schedule_id = schedules.id_schedule INNER JOIN movies ON schedules.film_code = movies.code_film WHERE transactions.operator_id = 1'
+        read = 'SELECT transactions.code_transaction, transactions.order_date, users.username, users.name, transactions.ticket_code, tickets.chair_id, transactions.topping_id, movies.title, schedules.date_schedule, schedules.start, schedules.end FROM transactions INNER JOIN users ON transactions.customer_id = users.id_user INNER JOIN tickets ON transactions.ticket_code = tickets.code_ticket INNER JOIN schedules ON transactions.schedule_id = schedules.id_schedule INNER JOIN movies ON schedules.film_code = movies.code_film WHERE transactions.operator_id != 0'
         cursor.execute(read)
         fetch = cursor.fetchall()
         for data in fetch:
@@ -189,8 +189,27 @@ class permission:
         table = PrettyTable(['Kode Transaksi', 'Tanggal Order', 'Username', 'Nama', 'Kode Tiket', 'Kode Kursi', 'ID Topping', 'Judul Film', 'Tanggal Film', 'Mulai', 'Selesai'])
         table.add_rows(fetch)
         return table
+    
+    def get_user_balances(self):
+        read = 'SELECT user_balances.id_balance, users.name, user_balances.amount FROM user_balances INNER JOIN users ON user_balances.id_user = users.id_user'
+        cursor.execute(read)
+        fetch = cursor.fetchall()
+        for data in fetch:
+            self.temporary_data.append(data)
+        table = PrettyTable(['ID User Saldo', 'Nama', 'Saldo'])
+        table.add_rows(fetch)
+        return table
 
-
+    def get_user_balances_spec(self, thisAmount):
+        spec = thisAmount
+        read = 'SELECT amount FROM user_balances WHERE id_balance = %s'
+        cursor.execute(read, (spec, ))
+        fetch = cursor.fetchall()
+        for data in fetch:
+            self.temporary_data.append(data)
+        table = PrettyTable(['amount'])
+        table.add_rows(fetch)
+        return table
 '''
 if __name__ == "__main__":
     permis = permission(25)

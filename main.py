@@ -253,7 +253,10 @@ while True:
                 time.sleep(1)
                 os.system('cls')
             elif(operatorMenu == 7):
-                print("Belum")
+                os.system('cls')
+                print("under construction")
+                time.sleep(1)
+                os.system('cls')
 
             #logout
             elif operatorMenu == 0:

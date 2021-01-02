@@ -17,11 +17,12 @@ class op(login):
         print('\t\t'+'='*10+'input data'+'='*10)
         print('\t\t1. Cek Ticket Pending')
         print('\t\t2. Konfirmasi Ticket Pending')
-        print('\t\t1. Cek Ticket Terselesaikan')
+        print('\t\t3. Cek Ticket Terselesaikan')
         print('\t\t4. add movie')
         print('\t\t5. add schedule')
         print('\t\t6. add topping')
         print('\t\t7. Topup saldo')
+        print('\t\t0. logout')
         n = int(input('masukan pilihan : '))
         return n
 
@@ -32,7 +33,6 @@ class op(login):
         cmdUpdate = 'UPDATE transactions SET operator_id = %s WHERE code_transaction = %s'
         valUpdate = (opLog[0], transactID)
         execute = (cmdUpdate, valUpdate)
-
         return execute
 
     @staticmethod

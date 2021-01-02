@@ -14,3 +14,4 @@ else:
 
 global cursor
 cursor = db.cursor()
+

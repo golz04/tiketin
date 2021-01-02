@@ -21,3 +21,7 @@ class login:
     
     def get_role(self):
         return self.role
+        
+    @staticmethod
+    def menu():
+        pass

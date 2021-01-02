@@ -36,7 +36,15 @@ class permission:
         pass
 
 
-    #user
+    def get_personalData(self,iduser):
+        read='SELECT * FROM users WHERE id_user = {}'.format(iduser)
+        cursor.execute(read)
+        a = cursor.fetchall()
+        self.temporary_data = a
+        table = PrettyTable(['id','name', 'username', 'password', ' gender', ' contact', 'address', 'role id'])
+        table.add_rows(a)
+        return table   
+
     def get_users_data(self):
         read='SELECT * FROM users'
         cursor.execute(read)
@@ -118,15 +126,14 @@ class permission:
         return table
 
     def get_topping_data(self):
+        self.temporary_data = []
         read='SELECT * FROM toppings'
         cursor.execute(read)
         a = cursor.fetchall()
-        for data in a:
-            self.temporary_data.append(data)
+        self.temporary_data = a
         table= PrettyTable(['id', 'nama topping', 'harga'])
         table.add_rows(a)
         return table
-
 
     # customer
     def get_schedules_all(self):
@@ -182,3 +189,10 @@ class permission:
         table = PrettyTable(['Kode Transaksi', 'Tanggal Order', 'Username', 'Nama', 'Kode Tiket', 'Kode Kursi', 'ID Topping', 'Judul Film', 'Tanggal Film', 'Mulai', 'Selesai'])
         table.add_rows(fetch)
         return table
+
+
+'''
+if __name__ == "__main__":
+    permis = permission(25)
+    print(permis.get_personalData(25))
+    print(permis.temporary_data)'''

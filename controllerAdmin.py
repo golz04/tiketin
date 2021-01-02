@@ -1,3 +1,4 @@
+from controllerCustomer import user
 from os import read
 
 import mConnection
@@ -7,6 +8,8 @@ from prettytable import PrettyTable
 from modelLogin import login
 
 class admin(login):
+    temp_variable1 = 0
+    temp_variable2 = 0
     def __init__(self, username, password, role):
         super().__init__(username, password, role)
 
@@ -22,22 +25,25 @@ class admin(login):
         print('\t\t6. hapus movie')
         print('\t\t7. hapus schedule')
         print('\t\t8. hapus topping')
+        print('\t\t'+'='*30)
+        print('\t\t0. logout')
         n = int(input('masukan pilihan : '))
         return n
     
-    @staticmethod
-    def add_user():
+    def add_user(self):
         ulang = True
         #memasukan nama
         name = input('masukan nama : ')
         #memasukan email
         username = input('masukan username : ')
+        self.temp_variable1 = username
         #memasukan password
         while ulang == True:
             password = input('masukan password : ')
             password_confirm = input('masukan password sekali lagi : ')
             if password == password_confirm:
                 ulang = False
+                self.temp_variable2 = password
         ulang = True
         #memasukan gender
         while ulang == True:
@@ -58,16 +64,29 @@ class admin(login):
             print('{}\t{}'.format(data[0], data[1]))
         role_id = int(input('masukan role id : '))
 
-        sql = 'INSERT INTO users (id_user, name, username, password, gender, contact, address, role_id) VALUES (NULL, %s, %s, %s, %s, %s, %s, %s)'
+        sql = '''
+        INSERT INTO users (id_user, name, username, password, gender, contact, address, role_id) VALUES (NULL, %s, %s, %s, %s, %s, %s, %s)
+        '''
         val = (name, username, password, gender, contact, alamat, role_id)
         sqlQuery = (sql, val)
         return  sqlQuery
+    
+    def initiate_userBalance(self):
+        read = 'SELECT id_user FROM users WHERE username = %s AND password = %s'
+        v = (self.temp_variable1, self.temp_variable2)
+        cursor.execute(read,v)
+        a = cursor.fetchone()
+        iduser = a[0]
+        sql ='INSERT INTO user_balances (id_balance, id_user, amount) VALUES (NULL, %s, 0)'
+        v = (iduser,)
+        cursor.execute(sql, v)
+        mConnection.db.commit()
 
     @staticmethod
     def add_schedule(movie_data, studio_data):
         tanggal = int(input('masukan tanggal (numerik): '))
         bulan = int(input('masukan bulan (numerik): '))
-        tahun = int(input('masukan tanggal (numerik): '))
+        tahun = int(input('masukan tahun (numerik): '))
         date = '{}-{}-{}'.format(tahun, bulan, tanggal)
         startInput = input('masukan jam film mulai(jam:menit) : ')
         start = '{}:00'.format(startInput)
